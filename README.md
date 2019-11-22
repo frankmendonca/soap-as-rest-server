@@ -11,7 +11,7 @@ $ pip3 install soap-as-rest-server
 ## Using as module
 
 ```bash
-$ python3 -m soap-as-rest-server
+$ CONFIG_FILE=src/config.yml TEMPLATE_FILE=src/template.xml python3 -m soap-as-rest-server
 ```
 
 # Importing and using
