@@ -5,7 +5,7 @@ README = os.path.join(os.path.dirname(__file__), 'README.md')
 REQUIREMENTS = os.path.join(os.path.dirname(__file__), 'requirements.txt')
 
 setup(
-    name='soap-proxy',
+    name='soap-as-rest-server',
     version='0.0.1',
     description='Soap Proxy Module to get data from SOAP Services',
     long_description=open(README).read(),
@@ -26,6 +26,6 @@ setup(
         'Programming Language :: Python :: 3',
         'Topic :: Software Development :: Libraries'
     ],
-    url='https://github.com/frankmendonca/soap_proxy',
+    url='https://github.com/frankmendonca/soap-as-rest-server',
     python_requires='>=3.6',
 )
