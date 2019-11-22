@@ -14,7 +14,7 @@ setup(
     license='MIT',
     keywords=['soap', 'xml', 'json', 'rest'],
     install_requires=open(REQUIREMENTS).readlines(),
-    packages=['soap_proxy'],
+    packages=['soap_as_rest_server'],
     zip_safe=False,
     platforms='any',
     include_package_data=True,
