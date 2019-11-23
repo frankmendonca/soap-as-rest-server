@@ -13,4 +13,7 @@ SERVER_ENDPOINT = environ.get('SERVER_ENDPOINT', '/') # e.g.: /myserver/
 LOG_FILE = environ.get('LOG_FILE', 'False') == 'True'
 LOG_LEVEL = environ.get('LOG_LEVEL', 'DEBUG')
 LOG_FORMAT = environ.get('LOG_FORMAT',
-                         '%(asctime)s|%(name)s|%(message_key)s|%(retries)s|%(levelname)s: %(message)s|%(duration)s')
+                         '%(asctime)s|%(name)s|%(levelname)s: %(message)s|%(duration)s')
+
+# test
+TEST_ENDPOINT_ENABLED = environ.get('TEST_ENDPOINT_ENABLED', 'True') == 'True'

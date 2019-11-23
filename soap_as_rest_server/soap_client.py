@@ -1,11 +1,12 @@
 import requests
 
-from .config import endpoints
+from . import header_handler
+from .config_file import endpoints
 from .elapsed import elapsed
 from .json_converter import convert_xml_to_json
-from .template_helper import template_body
-from .xml_converter import convert_json_to_xml
 from .logger import LoggerWrapper
+from .template_file import template_body
+from .xml_converter import convert_json_to_xml
 
 HEADERS = {'content-type': 'text/xml'}
 
@@ -24,8 +25,9 @@ def send_request(soap):
     url = f'{host}/{service}?wsdl'
     _logger.debug("URL = %s", url)
 
+    header = header_handler.get_values()
     body = convert_json_to_xml('con', method, params)
-    data = build_body_from_template(service_namespace, body)
+    data = build_body_from_template(service_namespace, **header, body=body)
     _logger.info("Request data: %s", data)
 
     response = call_post(url, data, timeout)
@@ -44,8 +46,8 @@ def send_request(soap):
     return response
 
 
-def build_body_from_template(service_namespace, body):
-    return template_body.format(service=service_namespace, body=body)
+def build_body_from_template(service_namespace, **variables):
+    return template_body.format(service=service_namespace, **variables)
 
 
 @elapsed

@@ -1,34 +1,22 @@
-from tornado.web import RequestHandler
-from requests.exceptions import ConnectTimeout
-import traceback
 import json
+import traceback
+
+from requests.exceptions import ConnectTimeout
 
 from . import soap_client
-from .settings import SERVER_ENDPOINT
-from .config import endpoints
+from .base_request_handler import BaseRequestHandler, ACCEPT_CONTENT_JSON
+from .config_file import endpoints
 from .logger import LoggerWrapper
-
-ACCEPT_CONTENT_JSON = 'application/json'
-ACCEPT_CONTENT_XML = 'text/xml'
+from .settings import SERVER_ENDPOINT
 
 
-class MainHandler(RequestHandler):
+class RestHandler(BaseRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.logger = LoggerWrapper('MainHandler::post')
-
-    def get(self, endpoint):
-        path = endpoint.replace(SERVER_ENDPOINT, '')
-        if path == 'health':
-            logger_health = LoggerWrapper('MainHandler::get::health')
-            logger_health.info('Called Health')
-            self.set_status(200)
-            self.write("OK")
-        else:
-            super(MainHandler, self).get(endpoint)
+        self.logger = LoggerWrapper('RestHandler::post')
 
     def post(self, endpoint):
-        path = endpoint.replace(SERVER_ENDPOINT, '')
+        path = endpoint.replace(f'{SERVER_ENDPOINT}api', '')
         self.logger.info('Endpoint = %s', path)
 
         endpoint_config = endpoints.get(path)
@@ -40,7 +28,7 @@ class MainHandler(RequestHandler):
         self.logger.info("config = %s", endpoint_config)
         self.logger.info("body = %s", self.request.body)
 
-        accept_xml = is_accept_xml(self.request)
+        accept_xml = self.is_accept_xml()
 
         soap_config = build_soap_config(endpoint_config, self.request.body, accept_xml)
 
@@ -64,18 +52,11 @@ class MainHandler(RequestHandler):
             self.write({'errorMessage': f'{e}', 'errorClass': type(e).__name__})
 
 
-def is_accept_xml(request):
-    return request.headers.get('Accept', ACCEPT_CONTENT_JSON) == ACCEPT_CONTENT_XML
-
-
 def build_soap_config(endpoint_config, request_body, accept_xml):
     soap_config = endpoint_config.copy()
     soap_config['accept_xml'] = accept_xml
 
-    if request_body:
-        body = json.loads(request_body)
-        soap_config['params'] = body
-    else:
-        soap_config['params'] = {}
+    body = json.loads(request_body) if request_body else {}
+    soap_config['params'] = body
 
     return soap_config

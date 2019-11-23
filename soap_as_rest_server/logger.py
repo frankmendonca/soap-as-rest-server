@@ -56,18 +56,10 @@ class CustomLogger(logging.Logger):
     def _log(self, level, msg, args, exc_info=None, extra=None, stack_info=None):
         if extra is None:
             extra = {}
-        if 'message_key' not in extra:
-            extra['message_key'] = 'NONE'
-        if 'retries' not in extra:
-            extra['retries'] = 0
-        if 'message_headers' not in extra:
-            extra['message_headers'] = None
         if 'traceback' not in extra:
             extra['traceback'] = ''
         if 'duration' not in extra:
             extra['duration'] = ''
-        if 'account' not in extra:
-            extra['account'] = ''
 
         super(CustomLogger, self)._log(
             level, msg, args, exc_info, extra, stack_info)

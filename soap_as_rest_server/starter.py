@@ -1,6 +1,6 @@
 def start():
     from .infos import show_infos
-    from . import app
+    from . import server
 
     show_infos()
-    app.init()
+    server.init()

@@ -6,7 +6,7 @@ REQUIREMENTS = os.path.join(os.path.dirname(__file__), 'requirements.txt')
 
 setup(
     name='soap-as-rest-server',
-    version='0.0.1',
+    version='0.0.2',
     description='Soap Proxy Module to get data from SOAP Services',
     long_description=open(README).read(),
     long_description_content_type='text/markdown',
